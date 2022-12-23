@@ -53,6 +53,7 @@ explore: orders {
   }
 }
 
+explore: product_facts {}
 
 explore: products {}
 
