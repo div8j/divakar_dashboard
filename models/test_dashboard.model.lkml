@@ -4,9 +4,9 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 # include: "/**/*.view.lkml"                 # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
-explore: airports {
-  group_label: "FAA"
-}
+explore: airports {}
+
+explore: aircraft_models {}
 
 explore: flights {
   group_label: "FAA"
@@ -37,10 +37,5 @@ explore: flights {
     sql_on: ${flights.destination} = ${aircraft_destination.code} ;;
     relationship: many_to_one
     fields: [full_name, city, state, code]
-  }
-
-  join: aircraft_models {
-    sql_on: ${aircraft.aircraft_model_code} = ${aircraft_models.aircraft_model_code} ;;
-    relationship: many_to_one
   }
 }
