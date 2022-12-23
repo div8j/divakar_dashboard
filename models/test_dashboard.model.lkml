@@ -4,38 +4,57 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 # include: "/**/*.view.lkml"                 # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
-explore: airports {}
+datagroup: ecommerce_divakar_default_datagroup {
+  # sql_trigger: SELECT MAX(id) FROM etl_log;;
+  max_cache_age: "1 hour"
+}
 
-explore: aircraft_models {}
+persist_with: ecommerce_divakar_default_datagroup
 
-explore: flights {
-  group_label: "FAA"
-  description: "Start here for information about flights!"
-  join: carriers {
+explore: inventory_items {
+  join: products {
     type: left_outer
-    sql_on: ${flights.carrier} = ${carriers.code} ;;
+    sql_on: ${inventory_items.product_id} = ${products.id} ;;
     relationship: many_to_one
-  }
-
-  join: aircraft {
-    type: left_outer
-    sql_on: ${flights.tail_num} = ${aircraft.tail_num} ;;
-    relationship: many_to_one
-  }
-
-  join: aircraft_origin {
-    from: airports
-    type: left_outer
-    sql_on: ${flights.origin} = ${aircraft_origin.code} ;;
-    relationship: many_to_one
-    fields: [full_name, city, state, code]
-  }
-
-  join: aircraft_destination {
-    from: airports
-    type: left_outer
-    sql_on: ${flights.destination} = ${aircraft_destination.code} ;;
-    relationship: many_to_one
-    fields: [full_name, city, state, code]
   }
 }
+
+explore: order_items {
+  join: orders {
+    type: left_outer
+    sql_on: ${order_items.order_id} = ${orders.id} ;;
+    relationship: many_to_one
+  }
+
+  join: inventory_items {
+    type: left_outer
+    sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
+    relationship: many_to_one
+  }
+
+  join: users {
+    type: left_outer
+    sql_on: ${orders.user_id} = ${users.id} ;;
+    relationship: many_to_one
+  }
+
+  join: products {
+    type: left_outer
+    sql_on: ${inventory_items.product_id} = ${products.id} ;;
+    relationship: many_to_one
+  }
+}
+
+explore: orders {
+  join: users {
+    type: left_outer
+    sql_on: ${orders.user_id} = ${users.id} ;;
+    relationship: many_to_one
+  }
+}
+
+
+explore: products {}
+
+explore: users {}
+#Just for testing new deploy
