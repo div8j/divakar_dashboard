@@ -46,5 +46,13 @@ view: products {
   measure: count {
     type: count
     drill_fields: [id, item_name, inventory_items.count]
+    html:
+      {% if value > 500 %}
+        <span style="color:darkgreen;">{{ rendered_value }}</span>
+      {% elsif value > 100 %}
+        <span style="color:goldenrod;">{{ rendered_value }}</span>
+      {% else %}
+        <span style="color:darkred;">{{ rendered_value }}</span>
+      {% endif %} ;;
   }
 }
